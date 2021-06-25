@@ -1,0 +1,24 @@
+{
+  "name": "homm3-tiled",
+  "version": "1.0.0",
+  "description": "### Prerequisites",
+  "main": "animations-tiled.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gfjalar/homm3-tiled.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gfjalar/homm3-tiled/issues"
+  },
+  "homepage": "https://github.com/gfjalar/homm3-tiled#readme",
+  "dependencies": {
+    "filereader": "^0.10.3",
+    "image-encode": "^1.3.1",
+    "zlib": "^1.0.5"
+  }
+}
