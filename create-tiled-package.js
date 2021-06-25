@@ -146,6 +146,7 @@ function create(inputFile, outputDir) {
   } else {
     defDir += 'h3sprite'
   }
+
   const tilesetOutputFile = outputDir + '/tileset.json'
   fs.mkdirSync(outputDir + '/tileset', { recursive: true })
   const tiles = seen.map(tileDefinition => {
@@ -172,6 +173,75 @@ function create(inputFile, outputDir) {
   }
   fs.writeFileSync(tilesetOutputFile, JSON.stringify(tileset, null, 2))
 
+  const tilesets = [{
+    firstgid: 1, 
+    source: 'tileset.json'
+  }]
+
+  const defToGID = {}
+  var oid = 0
+
+  fs.mkdirSync(outputDir + '/objectgroup', { recursive: true })
+
+  const objects = map.object_definitions.map(definition => [definition, map.object_attributes[definition.object_attributes_index]])
+  const zs = [...new Set(map.object_definitions.map(definition => { return definition.z }))]
+  const groups = zs.map(z => {
+    return objects.filter(([definition, attributes]) => { return definition.z == z }).map(([definition, attributes]) => {
+      if (attributes.object_class_name == 'GARRISON') {
+        console.log(attributes, definition)
+      }
+      const baseName = attributes.def.replace('.def', '').toLowerCase()
+      const srcDir = defDir + '/' + baseName + '/' + baseName
+      const json = JSON.parse(fs.readFileSync(srcDir + '/0.json'))
+      if (defToGID[baseName] == undefined) {
+        tilesets.push({
+          firstgid: gid + 1,
+          source: 'objectgroup/' + baseName + '.json'
+        })
+        json.name = json.name.replace('@0', '')
+        json.tiles = json.tiles.map(tile => {
+          tile.image = tile.image.replace('0/', baseName + '/')
+          return tile
+        })
+        fs.writeFileSync(outputDir + '/objectgroup/' + baseName + '.json',  JSON.stringify(json, null, 2))
+        fs.mkdirSync(outputDir + '/objectgroup/' + baseName)
+        fs.readdirSync(srcDir + '/0').forEach(srcFile => {
+          fs.copyFileSync(srcDir + '/0/' + srcFile, outputDir + '/objectgroup/' + baseName + '/' + srcFile)
+        })
+        gid += json.tilecount
+        defToGID[baseName] = gid
+      }
+      oid = oid + 1
+      return {
+        "gid": defToGID[baseName],
+        "width": json.tilewidth,
+        "height": json.tileheight,
+        "id": oid,
+        "name": baseName + '@' + oid,
+        "type": attributes.object_class_name,
+        "visible": true,
+        "x": definition.x * 32 - json.tilewidth / 2,
+        "y": definition.y * 32 + json.tileheight / 2
+      }
+    })
+  })
+
+  layers.push(...groups.map((group, lid) => {
+    return {
+      objects: group,
+      width: map.size,
+      height: map.size,
+      id: lid + layers.length,
+      name: 'Objects ' + lid,
+      opacity: 1,
+      type: 'objectgroup',
+      visible: lid == 0,
+      x: 0,
+      y: 0,
+      draworder: 'topdown',
+    }
+  }))
+
   const json = {
     tiledversion: '1.7.0',
     version: '1.6',
@@ -184,15 +254,10 @@ function create(inputFile, outputDir) {
     tilewidth: 32,
     tileheight: 32,
     type: 'map',
-    tilesets: [
-      {
-        firstgid: 1, 
-        source: 'tileset.json'
-      }
-    ],
+    tilesets: tilesets,
     layers: layers/*[
       {
-        data: [gid],
+        objects: [],
         width: map.size,
         height: map.size,
         id: 1,
