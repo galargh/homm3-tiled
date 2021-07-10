@@ -252,8 +252,14 @@ function extract(inputFile, outputDir) {
     // from left to right downwards towards the bottom right corner. This means
     // that first bit in passable[0] is [x-7, y-5] from bottom right corner and
     // last bit in passable[6] is the bottom right corner.
-    object_attribute.passable = Array(6).fill().map(_ => { return reader.readByte() })
-    object_attribute.active = Array(6).fill().map(_ => { return reader.readByte() })
+    object_attribute.passable = Array(6).fill().map(_ => {
+      const byte = reader.readByte()
+      return Array(8).fill().map((_, bit) => { return byte & (1 << bit) ? 1 : 0 })
+    })
+    object_attribute.active =  Array(6).fill().map(_ => {
+      const byte = reader.readByte()
+      return Array(8).fill().map((_, bit) => { return byte & (1 << bit) ? 1 : 0 })
+    })
     object_attribute.allowed_landscapes = reader.readShort()
     object_attribute.landscape_group = reader.readShort()
     object_attribute.object_class = reader.readInt()
