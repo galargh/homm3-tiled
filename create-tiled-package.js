@@ -48,36 +48,6 @@ function create(inputFile, outputDir) {
   const seen = []
 
   const layers = [{
-    name: 'Underground Terrain',
-    visible: false,
-    start: map.size * map.size,
-    end: map.size * map.size * 2,
-    typeKey: 'terrain_type',
-    idKey: 'terrain_sprite',
-    defs: TERRAIN_DEFS,
-    verticalMask: 2,
-    horizontalMask: 1,
-  }, {
-    name: 'Underground Rivers',
-    visible: false,
-    start: map.size * map.size,
-    end: map.size * map.size * 2,
-    typeKey: 'river_type',
-    idKey: 'river_sprite',
-    defs: RIVER_DEFS,
-    verticalMask: 8,
-    horizontalMask: 4,
-  }, {
-    name: 'Underground Roads',
-    visible: false,
-    start: map.size * map.size,
-    end: map.size * map.size * 2,
-    typeKey: 'road_type',
-    idKey: 'road_sprite',
-    defs: ROAD_DEFS,
-    verticalMask: 32,
-    horizontalMask: 16,
-  }, {
     name: 'Terrain',
     visible: true,
     start: 0,
@@ -87,6 +57,7 @@ function create(inputFile, outputDir) {
     defs: TERRAIN_DEFS,
     verticalMask: 2,
     horizontalMask: 1,
+    z: 0,
   }, {
     name: 'Rivers',
     visible: true,
@@ -97,6 +68,7 @@ function create(inputFile, outputDir) {
     defs: RIVER_DEFS,
     verticalMask: 8,
     horizontalMask: 4,
+    z: 0,
   }, {
     name: 'Roads',
     visible: true,
@@ -107,6 +79,40 @@ function create(inputFile, outputDir) {
     defs: ROAD_DEFS,
     verticalMask: 32,
     horizontalMask: 16,
+    z: 0,
+  }, {
+    name: 'Underground Terrain',
+    visible: false,
+    start: map.size * map.size,
+    end: map.size * map.size * 2,
+    typeKey: 'terrain_type',
+    idKey: 'terrain_sprite',
+    defs: TERRAIN_DEFS,
+    verticalMask: 2,
+    horizontalMask: 1,
+    z: 1,
+  }, {
+    name: 'Underground Rivers',
+    visible: false,
+    start: map.size * map.size,
+    end: map.size * map.size * 2,
+    typeKey: 'river_type',
+    idKey: 'river_sprite',
+    defs: RIVER_DEFS,
+    verticalMask: 8,
+    horizontalMask: 4,
+    z: 1,
+  }, {
+    name: 'Underground Roads',
+    visible: false,
+    start: map.size * map.size,
+    end: map.size * map.size * 2,
+    typeKey: 'road_type',
+    idKey: 'road_sprite',
+    defs: ROAD_DEFS,
+    verticalMask: 32,
+    horizontalMask: 16,
+    z: 1,
   }].map((layerDefinition, lid) => {
     const data = map.tiles.slice(layerDefinition.start, layerDefinition.end).map(tile => {
       const def = layerDefinition.defs[tile[layerDefinition.typeKey]]
@@ -136,7 +142,12 @@ function create(inputFile, outputDir) {
       height: map.size,
       opacity: 1,
       x: 0,
-      y: 0
+      y: 0,
+      properties: [{
+        "name": "z",
+        "type": "int",
+        "value": layerDefinition.z
+      }]
     }
   })
 
@@ -184,58 +195,69 @@ function create(inputFile, outputDir) {
   fs.mkdirSync(outputDir + '/objectgroup', { recursive: true })
 
   const objects = map.object_definitions.map(definition => [definition, map.object_attributes[definition.object_attributes_index]])
-  const zs = [...new Set(map.object_definitions.map(definition => { return definition.z }))]
-  const groups = zs.map(z => {
-    return objects.filter(([definition, attributes]) => { return definition.z == z }).map(([definition, attributes]) => {
-      const baseName = attributes.def.replace('.def', '').toLowerCase()
-      const srcDir = defDir + '/' + baseName + '/' + baseName
-      const json = JSON.parse(fs.readFileSync(srcDir + '/0.json'))
-      if (defToGID[baseName] == undefined) {
-        tilesets.push({
-          firstgid: gid + 1,
-          source: 'objectgroup/' + baseName + '.json'
-        })
-        json.name = json.name.replace('@0', '')
-        json.tiles = json.tiles.map(tile => {
-          tile.image = tile.image.replace('0/', baseName + '/')
-          return tile
-        })
-        fs.writeFileSync(outputDir + '/objectgroup/' + baseName + '.json',  JSON.stringify(json, null, 2))
-        fs.mkdirSync(outputDir + '/objectgroup/' + baseName)
-        fs.readdirSync(srcDir + '/0').forEach(srcFile => {
-          fs.copyFileSync(srcDir + '/0/' + srcFile, outputDir + '/objectgroup/' + baseName + '/' + srcFile)
-        })
-        gid += json.tilecount
-        defToGID[baseName] = gid
-      }
-      oid = oid + 1
-      return {
-        "gid": defToGID[baseName],
-        "width": json.tilewidth,
-        "height": json.tileheight,
-        "id": oid,
-        "name": baseName + '@' + oid,
-        "type": attributes.object_class_name,
-        "visible": true,
-        "x": definition.x * 32 + 32 - json.tilewidth,
-        "y": definition.y * 32 + 32
-      }
-    })
-  })
+  const groups = objects.map(([definition, attributes]) => {
+    const baseName = attributes.def.replace('.def', '').toLowerCase()
+    const srcDir = defDir + '/' + baseName + '/' + baseName
+    const json = JSON.parse(fs.readFileSync(srcDir + '/0.json'))
+    if (defToGID[baseName] == undefined) {
+      tilesets.push({
+        firstgid: gid + 1,
+        source: 'objectgroup/' + baseName + '.json'
+      })
+      json.name = json.name.replace('@0', '')
+      json.tiles = json.tiles.map(tile => {
+        tile.image = tile.image.replace('0/', baseName + '/')
+        return tile
+      })
+      fs.writeFileSync(outputDir + '/objectgroup/' + baseName + '.json',  JSON.stringify(json, null, 2))
+      fs.mkdirSync(outputDir + '/objectgroup/' + baseName)
+      fs.readdirSync(srcDir + '/0').forEach(srcFile => {
+        fs.copyFileSync(srcDir + '/0/' + srcFile, outputDir + '/objectgroup/' + baseName + '/' + srcFile)
+      })
+      gid += json.tilecount
+      defToGID[baseName] = gid
+    }
+    oid = oid + 1
+    return {
+      "gid": defToGID[baseName],
+      "width": json.tilewidth,
+      "height": json.tileheight,
+      "id": oid,
+      "name": baseName + '@' + oid,
+      "type": attributes.object_class_name,
+      "visible": true,
+      "x": definition.x * 32 + 32 - json.tilewidth,
+      "y": definition.y * 32 + 32,
+      "properties": [{
+        "name": "z",
+        "type": "int",
+        "value": definition.z
+      }]
+    }
+  }).reduce((agg, object) => {
+    const key = JSON.stringify(object.properties)
+    agg[key] = agg[key] || []
+    agg[key].push(object)
+    return agg
+  }, {})
 
-  layers.push(...groups.map((group, lid) => {
+  layers.push(...Object.keys(groups).map(key => {
+    const group = groups[key]
+    const properties = JSON.parse(key)
+    const z = properties.find(property => { return property.name == "z" }).value
     return {
       objects: group,
       width: map.size,
       height: map.size,
-      id: lid + layers.length,
-      name: 'Objects ' + lid,
+      id: z + layers.length,
+      name: z == 0 ? 'Objects' : 'Underground Objects',
       opacity: 1,
       type: 'objectgroup',
-      visible: lid == 0,
+      visible: z == 0,
       x: 0,
       y: 0,
       draworder: 'topdown',
+      properties: properties
     }
   }))
 
