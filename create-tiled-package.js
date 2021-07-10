@@ -170,7 +170,7 @@ function create(inputFile, outputDir) {
     }
     const src = defDir + '/' + tileDefinition.def + '/' + tileDefinition.def + '/' + tile.image
     tile.image = tile.image.replace('0/', 'tileset/')
-    tile.id = tileDefinition.gid - 1
+    tile.id = tileDefinition.gid
     fs.copyFileSync(src, outputDir + '/' + tile.image)
     return tile
   })
@@ -205,8 +205,49 @@ function create(inputFile, outputDir) {
         source: 'objectgroup/' + baseName + '.json'
       })
       json.name = json.name.replace('@0', '')
+      var  group_object_id = 0
+      const objectgroup = []
+      Array(8).fill().map((_, x) => { return Array(6).fill().map((_, y) => { return [x, y] }) }).flat().map(([x, y]) => {
+        const rx = -(8 - (json.tilewidth / 32) - x) * 32
+        const ry = -(6 - (json.tileheight / 32) - y) * 32
+        if (attributes.passable[y][x] == 0) {
+          group_object_id = group_object_id + 1
+          objectgroup.push({
+            width: 32,
+            height: 32,
+            name: "",
+            type: "impassable",
+            visible: true,
+            x: rx,
+            y: ry
+          })
+        }
+        if (attributes.active[y][x] == 1) {
+          group_object_id = group_object_id + 1
+          objectgroup.push({
+            width: 32,
+            height: 32,
+            name: "",
+            type: "active",
+            visible: true,
+            x: rx,
+            y: ry
+          })
+        }
+      })
       json.tiles = json.tiles.map(tile => {
         tile.image = tile.image.replace('0/', baseName + '/')
+        tile.objectgroup = {
+          draworder: "index",
+          id: 2,
+          name: "",
+          objects: objectgroup,
+          opacity: 1,
+          type: "objectgroup",
+          visible: true,
+          x: 0,
+          y: 0
+        }
         return tile
       })
       fs.writeFileSync(outputDir + '/objectgroup/' + baseName + '.json',  JSON.stringify(json, null, 2))
