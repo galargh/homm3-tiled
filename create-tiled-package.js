@@ -187,9 +187,6 @@ function create(inputFile, outputDir) {
   const zs = [...new Set(map.object_definitions.map(definition => { return definition.z }))]
   const groups = zs.map(z => {
     return objects.filter(([definition, attributes]) => { return definition.z == z }).map(([definition, attributes]) => {
-      if (attributes.object_class_name == 'GARRISON') {
-        console.log(attributes, definition)
-      }
       const baseName = attributes.def.replace('.def', '').toLowerCase()
       const srcDir = defDir + '/' + baseName + '/' + baseName
       const json = JSON.parse(fs.readFileSync(srcDir + '/0.json'))
@@ -220,8 +217,8 @@ function create(inputFile, outputDir) {
         "name": baseName + '@' + oid,
         "type": attributes.object_class_name,
         "visible": true,
-        "x": definition.x * 32 - json.tilewidth / 2,
-        "y": definition.y * 32 + json.tileheight / 2
+        "x": definition.x * 32 + 32 - json.tilewidth,
+        "y": definition.y * 32 + 32
       }
     })
   })
@@ -255,20 +252,9 @@ function create(inputFile, outputDir) {
     tileheight: 32,
     type: 'map',
     tilesets: tilesets,
-    layers: layers/*[
-      {
-        objects: [],
-        width: map.size,
-        height: map.size,
-        id: 1,
-        name: 'terrain',
-        opacity: 1,
-        type: 'tilelayer',
-        visible: true,
-        x: 0,
-        y: 0
-      }
-    ]*/
+    layers: layers,
+    nextlayerid: layers.length + 1,
+    nextobjectid: oid + 1
   }
   fs.writeFileSync(outputDir + '/map.json', JSON.stringify(json, null, 2))
   
