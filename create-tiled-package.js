@@ -170,7 +170,7 @@ function create(inputFile, outputDir) {
     }
     const src = defDir + '/' + tileDefinition.def + '/' + tileDefinition.def + '/' + tile.image
     tile.image = tile.image.replace('0/', 'tileset/')
-    tile.id = tileDefinition.gid
+    tile.id = tileDefinition.gid - 1
     fs.copyFileSync(src, outputDir + '/' + tile.image)
     return tile
   })
