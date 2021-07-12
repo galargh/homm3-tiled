@@ -36,14 +36,14 @@ function extract(inputFile, outputDir) {
   reader.skip(8)
   const blocks = reader.readInt()
   const palette = reader.readByteArray(256 * 3)
-  const groups = Array(blocks).fill().map(_ => {
+  const groups = Array(blocks).fill(undefined).map(_ => {
     const id = reader.readInt()
     const entries = reader.readInt()
     reader.skip(8)
-    const names = Array(entries).fill().map(_ => {
+    const names = Array(entries).fill(undefined).map(_ => {
       return reader.readString(13).split('\0')[0].toLowerCase()
     })
-    const offsets = Array(entries).fill().map(_ => {
+    const offsets = Array(entries).fill(undefined).map(_ => {
       return reader.readInt()
     })
     return [id, names, offsets]
@@ -77,7 +77,7 @@ function extract(inputFile, outputDir) {
           data = reader.readByteArray(width * height)
           break
         case 1:
-          Array(height).fill().map(_ => { return reader.readInt() }).forEach(dataOffset => {
+          Array(height).fill(undefined).map(_ => { return reader.readInt() }).forEach(dataOffset => {
             reader.set(offset + 32 + dataOffset)
             var widthCovered = 0
             while (widthCovered < width) {
@@ -93,7 +93,7 @@ function extract(inputFile, outputDir) {
           })
           break
         case 2:
-          Array(height).fill().map(_ => { return reader.readShort() }).forEach(dataOffset => {
+          Array(height).fill(undefined).map(_ => { return reader.readShort() }).forEach(dataOffset => {
             reader.set(offset + 32 + dataOffset)
             var widthCovered = 0
             while (widthCovered < width) {
@@ -110,7 +110,7 @@ function extract(inputFile, outputDir) {
           })
           break
         case 3:
-          Array(height * (width / 32)).fill().map(_ => { return reader.readShort() }).forEach(dataOffset => {
+          Array(height * (width / 32)).fill(undefined).map(_ => { return reader.readShort() }).forEach(dataOffset => {
             reader.set(offset + 32 + dataOffset)
             var widthCovered = 0
             while (widthCovered < 32) {
@@ -185,7 +185,7 @@ function extract(inputFile, outputDir) {
       tiles.push(
         {...tiles[0], ...{ 
           "id": tiles.length, 
-          "animation": Array(tiles.length).fill().map((_, tileId) => { return {"duration": 100, "tileid": tileId} })
+          "animation": Array(tiles.length).fill(undefined).map((_, tileId) => { return {"duration": 100, "tileid": tileId} })
         }}
       )
     }

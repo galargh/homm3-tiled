@@ -31,7 +31,7 @@ function extract(inputFile, outputDir) {
     map.mastery_cap = reader.readByte()
   }
 
-  map.players = Array(8).fill().map(_ => {
+  map.players = Array(8).fill(undefined).map(_ => {
     const player = {} as any
     player.can_be_human = reader.readBool()
     player.can_be_computer = reader.readBool()
@@ -154,18 +154,18 @@ function extract(inputFile, outputDir) {
   map.special_loss_condition = special_loss_condition
 
   if (reader.readBool()) {
-    map.teams = Array(8).fill().map(_ => { return reader.readByte() })
+    map.teams = Array(8).fill(undefined).map(_ => { return reader.readByte() })
   }
   if (map.format == FORMAT.ROE) {
-    map.available_heroes = Array(16).fill().map(_ => { return reader.readByte() })
+    map.available_heroes = Array(16).fill(undefined).map(_ => { return reader.readByte() })
   } else {
-    map.available_heroes = Array(20).fill().map(_ => { return reader.readByte() })
+    map.available_heroes = Array(20).fill(undefined).map(_ => { return reader.readByte() })
   }
   if (map.format >= FORMAT.AB) {
     map.placeholder_heroes_count = reader.readInt()
   }
   if (map.format >= FORMAT.SOD) {
-    map.custom_heroes = Array(reader.readByte()).fill().map(_ => {
+    map.custom_heroes = Array(reader.readByte()).fill(undefined).map(_ => {
       const custom_hero = {} as any
       custom_hero.type = reader.readByte()
       custom_hero.face = reader.readByte()
@@ -174,24 +174,24 @@ function extract(inputFile, outputDir) {
       return custom_hero
     })
   }
-  map.reserved = Array(31).fill().map(_ => { return reader.readByte() })
+  map.reserved = Array(31).fill(undefined).map(_ => { return reader.readByte() })
   if (map.format == FORMAT.AB) {
-    map.available_artifacts = Array(17).fill().map(_ => { return reader.readByte() })
+    map.available_artifacts = Array(17).fill(undefined).map(_ => { return reader.readByte() })
   } else if (map.format >= FORMAT.SOD) {
-    map.available_artifacts = Array(18).fill().map(_ => { return reader.readByte() })
+    map.available_artifacts = Array(18).fill(undefined).map(_ => { return reader.readByte() })
   }
   if (map.format >= FORMAT.SOD) {
-    map.available_spells = Array(9).fill().map(_ => { return reader.readByte() })
-    map.available_skills = Array(4).fill().map(_ => { return reader.readByte() })
+    map.available_spells = Array(9).fill(undefined).map(_ => { return reader.readByte() })
+    map.available_skills = Array(4).fill(undefined).map(_ => { return reader.readByte() })
   }
-  map.rumors = Array(reader.readInt()).fill().map(_ => {
+  map.rumors = Array(reader.readInt()).fill(undefined).map(_ => {
     const rumor = {} as any
     rumor.name = reader.readString(reader.readInt())
     rumor.description = reader.readString(reader.readInt())
     return rumor
   })
   if (map.format >= FORMAT.SOD) {
-    map.hero_settings = Array(156).fill().map(_ => {
+    map.hero_settings = Array(156).fill(undefined).map(_ => {
       const hero = {} as any
       if (reader.readBool()) {
         if (reader.readBool()) {
@@ -203,14 +203,14 @@ function extract(inputFile, outputDir) {
         }
         if (reader.readBool()) {
           hero.artifacts = reader.readArtifacts()
-          hero.backpack = Array(reader.readShort()).fill().map(_ => { return reader.readArtifact(map) })
+          hero.backpack = Array(reader.readShort()).fill(undefined).map(_ => { return reader.readArtifact(map) })
         }
         if (reader.readBool()) {
           hero.biography = reader.readString(reader.readInt())
         }
         hero.gender = reader.readByte()
         if (reader.readBool()) {
-          hero.spells = Array(9).fill().map(_ => { return reader.readByte() })
+          hero.spells = Array(9).fill(undefined).map(_ => { return reader.readByte() })
         }
         if (reader.readBool()) {
           hero.primary_skills = reader.readPrimarySkills()
@@ -220,7 +220,7 @@ function extract(inputFile, outputDir) {
     })
   }
   const tiles_count = map.has_second_level ? map.size * map.size * 2 : map.size * map.size
-  map.tiles = Array(tiles_count).fill().map(_ => {
+  map.tiles = Array(tiles_count).fill(undefined).map(_ => {
     const tile = {} as any
     /*
     T_DIRT,
@@ -244,7 +244,7 @@ function extract(inputFile, outputDir) {
     return tile
   })
 
-  map.object_attributes = Array(reader.readInt()).fill().map(_ => {
+  map.object_attributes = Array(reader.readInt()).fill(undefined).map(_ => {
     const object_attribute = {} as any
     object_attribute.def = reader.readString(reader.readInt())
     // The passable and active arrays are bitfields representing an 8x6 tile
@@ -252,13 +252,13 @@ function extract(inputFile, outputDir) {
     // from left to right downwards towards the bottom right corner. This means
     // that first bit in passable[0] is [x-7, y-5] from bottom right corner and
     // last bit in passable[6] is the bottom right corner.
-    object_attribute.passable = Array(6).fill().map(_ => {
+    object_attribute.passable = Array(6).fill(undefined).map(_ => {
       const byte = reader.readByte()
-      return Array(8).fill().map((_, bit) => { return byte & (1 << bit) ? 1 : 0 })
+      return Array(8).fill(undefined).map((_, bit) => { return byte & (1 << bit) ? 1 : 0 })
     })
-    object_attribute.active =  Array(6).fill().map(_ => {
+    object_attribute.active =  Array(6).fill(undefined).map(_ => {
       const byte = reader.readByte()
-      return Array(8).fill().map((_, bit) => { return byte & (1 << bit) ? 1 : 0 })
+      return Array(8).fill(undefined).map((_, bit) => { return byte & (1 << bit) ? 1 : 0 })
     })
     object_attribute.allowed_landscapes = reader.readShort()
     object_attribute.landscape_group = reader.readShort()
@@ -269,19 +269,19 @@ function extract(inputFile, outputDir) {
     // 3 - heroes 4 - artifacts
     object_attribute.object_group = reader.readByte()
     object_attribute.above = reader.readByte()
-    object_attribute.unknown = Array(16).fill().map(_ => { return reader.readByte() })
+    object_attribute.unknown = Array(16).fill(undefined).map(_ => { return reader.readByte() })
     return object_attribute
   })
 
   // TODO: https://github.com/potmdehex/homm3tools/blob/5687f581a4eb5e7b0e8f48794d7be4e3b0a8cc8b/h3m/h3mlib/h3m_parsing/parse_oa.c#L108
 
-  const object_definitions = Array(reader.readInt()).fill().map(_ => {
+  const object_definitions = Array(reader.readInt()).fill(undefined).map(_ => {
     const object_definition = {} as any
     object_definition.x = reader.readByte()
     object_definition.y = reader.readByte()
     object_definition.z = reader.readByte()
     object_definition.object_attributes_index = reader.readInt()
-    object_definition.unknown = Array(5).fill().map(_ => { return reader.readByte() })
+    object_definition.unknown = Array(5).fill(undefined).map(_ => { return reader.readByte() })
 
     const object_attribute = map.object_attributes[object_definition.object_attributes_index]
     const object_class = object_attribute.object_class
@@ -305,43 +305,43 @@ function extract(inputFile, outputDir) {
         if (reader.readBool()) {
           object_definition.message = reader.readString(reader.readInt())
           if (reader.readBool()) {
-            object_definition.creatures = Array(7).fill().map(_ => { return reader.readCreature(map) })
+            object_definition.creatures = Array(7).fill(undefined).map(_ => { return reader.readCreature(map) })
           }
-          object_definition.unknown = Array(4).fill().map(_ => { return reader.readByte() })
+          object_definition.unknown = Array(4).fill(undefined).map(_ => { return reader.readByte() })
         }
         object_definition.experience = reader.readInt()
         object_definition.morale = reader.readByte()
         object_definition.luck = reader.readByte()
         object_definition.morale = reader.readByte()
-        object_definition.resources = Array(7).fill().map(_ => { return reader.readInt() })
+        object_definition.resources = Array(7).fill(undefined).map(_ => { return reader.readInt() })
         object_definition.primary_skills = reader.readPrimarySkills()
         object_definition.secondary_skills = reader.readSecondarySkills()
         object_definition.artifacts = Array.fill(reader.readByte()).map(_ => { return reader.readArtifact(map) })
         object_definition.spells = Array.fill(reader.readByte()).map(_ => { return reader.readByte() })
         object_definition.creatures = Array.fill(reader.readByte()).map(_ => { reader.readCreature(map) })
-        object_definition.unknown = Array(8).fill().map(_ => { return reader.readByte() })
+        object_definition.unknown = Array(8).fill(undefined).map(_ => { return reader.readByte() })
         if (object_class == OBJECT_CLASS.EVENT) {
           object_definition.applies_to_players = reader.readByte()
           object_definition.applies_to_computer = reader.readByte()
           object_definition.cancel_after_visit = reader.readByte()
-          object_definition.unknown1 = Array(4).fill().map(_ => { return reader.readByte() })
+          object_definition.unknown1 = Array(4).fill(undefined).map(_ => { return reader.readByte() })
         }
         break
       case OBJECT_CLASS.SIGN:
       case OBJECT_CLASS.OCEAN_BOTTLE:
         object_definition.object_class_group_name = 'SIGN'
         object_definition.message = reader.readString(reader.readInt())
-        object_definition.unknown = Array(4).fill().map(_ => { return reader.readByte() })
+        object_definition.unknown = Array(4).fill(undefined).map(_ => { return reader.readByte() })
         break
       case OBJECT_CLASS.GARRISON:
       case OBJECT_CLASS.GARRISON2:
         object_definition.object_class_group_name = 'GARRISON'
         object_definition.owner = reader.readInt()
-        object_definition.creatures = Array(7).fill().map(_ => { reader.readCreature(map) })
+        object_definition.creatures = Array(7).fill(undefined).map(_ => { reader.readCreature(map) })
         if (map.format >= FORMAT.AB) {
           object_definition.removable_units = reader.readByte()
         }
-        object_definition.unknown = Array(8).fill().map(_ => { return reader.readByte() })
+        object_definition.unknown = Array(8).fill(undefined).map(_ => { return reader.readByte() })
         break
       case OBJECT_CLASS.GRAIL:
         object_definition.object_class_group_name = 'GRAIL'
@@ -556,24 +556,24 @@ function extract(inputFile, outputDir) {
           object_definition.name = reader.readString(reader.readInt())
         }
         if (reader.readBool()) {
-          object_definition.creatures = Array(7).fill().map(_ => { return reader.readCreature(map) })
+          object_definition.creatures = Array(7).fill(undefined).map(_ => { return reader.readCreature(map) })
         }
         object_definition.formation = reader.readByte()
         if (reader.readBool()) {
-          object_definition.built_buildings = Array(6).fill().map(_ => { return reader.readByte() })
-          object_definition.disabled_buildings = Array(6).fill().map(_ => { return reader.readByte() })
+          object_definition.built_buildings = Array(6).fill(undefined).map(_ => { return reader.readByte() })
+          object_definition.disabled_buildings = Array(6).fill(undefined).map(_ => { return reader.readByte() })
         } else {
           object_definition.has_fort = reader.readBool()
         }
         if (map.format >= FORMAT.AB) {
-          object_definition.must_have_spells = Array(9).fill().map(_ => { return reader.readByte() })
+          object_definition.must_have_spells = Array(9).fill(undefined).map(_ => { return reader.readByte() })
         }
-        object_definition.may_have_spells = Array(9).fill().map(_ => { return reader.readByte() })
+        object_definition.may_have_spells = Array(9).fill(undefined).map(_ => { return reader.readByte() })
         object_definition.events = reader.readEvents(map)
         if (map.format >= FORMAT.SOD) {
           object_definition.alignment = reader.readByte()
         }
-        object_definition.unknown = Array(3).fill().map(_ => { return reader.readByte() })
+        object_definition.unknown = Array(3).fill(undefined).map(_ => { return reader.readByte() })
         break
       case OBJECT_CLASS.RANDOM_DWELLING:
       case OBJECT_CLASS.RANDOM_DWELLING_FACTION:
@@ -583,7 +583,7 @@ function extract(inputFile, outputDir) {
         if (object_class != OBJECT_CLASS.RANDOM_DWELLING_FACTION) {
           object_definition.castle_id = reader.readInt()
           if (object_definition.castle_id == 0) {
-            object_definition.alignments = Array(2).fill().map(_ => { return reader.readByte() })
+            object_definition.alignments = Array(2).fill(undefined).map(_ => { return reader.readByte() })
           }
         }
         if (object_class != OBJECT_CLASS.RANDOM_DWELLING_LVL) {
@@ -617,12 +617,12 @@ function extract(inputFile, outputDir) {
           object_definition.secondary_skills = reader.readSecondarySkills()
         }
         if (reader.readBool()) {
-          object_definition.creatures = Array(7).fill().map(_ => { return reader.readCreature(map) })
+          object_definition.creatures = Array(7).fill(undefined).map(_ => { return reader.readCreature(map) })
         }
         object_definition.formation = reader.readByte()
         if (reader.readBool()) {
           object_definition.artifacts = reader.readArtifacts()
-          object_definition.backpack = Array(reader.readShort()).fill().map(_ => { return reader.readArtifact(map) })
+          object_definition.backpack = Array(reader.readShort()).fill(undefined).map(_ => { return reader.readArtifact(map) })
         }
         object_definition.patrol_radius = reader.readByte()
         if (map.format >= FORMAT.AB) {
@@ -635,7 +635,7 @@ function extract(inputFile, outputDir) {
           object_definition.spells = [reader.readByte()]
         } else if (map.format >= FORMAT.SOD) {
           if (reader.readBool()) {
-            object_definition.spells = Array(9).fill().map(_ => { return reader.readByte() })
+            object_definition.spells = Array(9).fill(undefined).map(_ => { return reader.readByte() })
           }
         }
         if (map.format >= FORMAT.SOD) {
@@ -643,7 +643,7 @@ function extract(inputFile, outputDir) {
             object_definition.primary_skills = reader.readPrimarySkills()
           }
         }
-        object_definition.unknown = Array(16).fill().map(_ => { return reader.readByte() })
+        object_definition.unknown = Array(16).fill(undefined).map(_ => { return reader.readByte() })
         break
       case OBJECT_CLASS.MONSTER:
       case OBJECT_CLASS.RANDOM_MONSTER:
@@ -662,12 +662,12 @@ function extract(inputFile, outputDir) {
         object_definition.disposition = reader.readByte()
         if (reader.readBool()) {
           object_definition.message = reader.readString(reader.readInt())
-          object_definition.resources = Array(7).fill().map(_ => { return reader.readInt() })
+          object_definition.resources = Array(7).fill(undefined).map(_ => { return reader.readInt() })
           object_definition.artifact = reader.readArtifact(map)
         }
         object_definition.never_flees = reader.readByte()
         object_definition.does_not_grow = reader.readByte()
-        object_definition.unknown = Array(2).fill().map(_ => { return reader.readByte() })
+        object_definition.unknown = Array(2).fill(undefined).map(_ => { return reader.readByte() })
         break
       case OBJECT_CLASS.ARTIFACT:
       case OBJECT_CLASS.RANDOM_ART:
@@ -679,9 +679,9 @@ function extract(inputFile, outputDir) {
         if (reader.readBool()) {
           object_definition.message = reader.readString(reader.readInt())
           if (reader.readBool()) {
-            object_definition.creatures = Array(7).fill().map(_ => { return reader.readCreature(map) })
+            object_definition.creatures = Array(7).fill(undefined).map(_ => { return reader.readCreature(map) })
           }
-          object_definition.unknown = Array(4).fill().map(_ => { return reader.readByte() })
+          object_definition.unknown = Array(4).fill(undefined).map(_ => { return reader.readByte() })
         }
         break
       case OBJECT_CLASS.SHRINE_OF_MAGIC_INCANTATION:
@@ -695,9 +695,9 @@ function extract(inputFile, outputDir) {
         if (reader.readBool()) {
           object_definition.message = reader.readString(reader.readInt())
           if (reader.readBool()) {
-            object_definition.creatures = Array(7).fill().map(_ => { return reader.readCreature(map) })
+            object_definition.creatures = Array(7).fill(undefined).map(_ => { return reader.readCreature(map) })
           }
-          object_definition.unknown = Array(4).fill().map(_ => { return reader.readByte() })
+          object_definition.unknown = Array(4).fill(undefined).map(_ => { return reader.readByte() })
         }
         object_definition.spell = reader.readInt()
         break
@@ -707,17 +707,17 @@ function extract(inputFile, outputDir) {
         if (reader.readBool()) {
           object_definition.message = reader.readString(reader.readInt())
           if (reader.readBool()) {
-            object_definition.creatures = Array(7).fill().map(_ => { return reader.readCreature(map) })
+            object_definition.creatures = Array(7).fill(undefined).map(_ => { return reader.readCreature(map) })
           }
-          object_definition.unknown = Array(4).fill().map(_ => { return reader.readByte() })
+          object_definition.unknown = Array(4).fill(undefined).map(_ => { return reader.readByte() })
         }
         object_definition.quantity = reader.readInt()
-        object_definition.unknown1 = Array(4).fill().map(_ => { return reader.readByte() })
+        object_definition.unknown1 = Array(4).fill(undefined).map(_ => { return reader.readByte() })
         break
       case OBJECT_CLASS.WITCH_HUT:
         object_definition.object_class_group_name = 'WITCH_HUT'
         if (map.format >= FORMAT.AB) {
-          object_definition.potential_skills = Array(4).fill().map(_ => { return reader.readByte() })
+          object_definition.potential_skills = Array(4).fill(undefined).map(_ => { return reader.readByte() })
         }
         break
       case OBJECT_CLASS.SEER_HUT:
@@ -731,42 +731,42 @@ function extract(inputFile, outputDir) {
         switch(object_definition.reward_type) {
           case REWARD_TYPE.EXPERIENCE:
           case REWARD_TYPE.SPELL_POINTS:
-            object_definition.reward = Array(4).fill().map(_ => { return reader.readByte() })
+            object_definition.reward = Array(4).fill(undefined).map(_ => { return reader.readByte() })
             break
           case REWARD_TYPE.ARTIFACT:
             if (map.format == FORMAT.ROE) {
-              object_definition.reward = Array(1).fill().map(_ => { return reader.readByte() })
+              object_definition.reward = Array(1).fill(undefined).map(_ => { return reader.readByte() })
             } else {
-              object_definition.reward = Array(2).fill().map(_ => { return reader.readByte() })
+              object_definition.reward = Array(2).fill(undefined).map(_ => { return reader.readByte() })
             }
             break
           case REWARD_TYPE.LUCK:
           case REWARD_TYPE.MORALE:
           case REWARD_TYPE.SPELL:
-            object_definition.reward = Array(1).fill().map(_ => { return reader.readByte() })
+            object_definition.reward = Array(1).fill(undefined).map(_ => { return reader.readByte() })
             break
           case REWARD_TYPE.RESOURCE:
-            object_definition.reward = Array(5).fill().map(_ => { return reader.readByte() })
+            object_definition.reward = Array(5).fill(undefined).map(_ => { return reader.readByte() })
             break
           case REWARD_TYPE.PRIMARY_SKILL:
           case REWARD_TYPE.SECONDARY_SKILL:
-            object_definition.reward = Array(2).fill().map(_ => { return reader.readByte() })
+            object_definition.reward = Array(2).fill(undefined).map(_ => { return reader.readByte() })
             break
           case REWARD_TYPE.CREATURE:
             if (map.format == FORMAT.ROE) {
-              object_definition.reward = Array(3).fill().map(_ => { return reader.readByte() })
+              object_definition.reward = Array(3).fill(undefined).map(_ => { return reader.readByte() })
             } else {
-              object_definition.reward = Array(4).fill().map(_ => { return reader.readByte() })
+              object_definition.reward = Array(4).fill(undefined).map(_ => { return reader.readByte() })
             }
             break
         }
-        object_definition.unknown = Array(2).fill().map(_ => { return reader.readByte() })
+        object_definition.unknown = Array(2).fill(undefined).map(_ => { return reader.readByte() })
         break
       case OBJECT_CLASS.SCHOLAR:
         object_definition.object_class_group_name = 'SCHOLAR'
         object_definition.reward_type = reader.readByte()
         object_definition.reward_value = reader.readByte()
-        object_definition.unknown = Array(6).fill().map(_ => { return reader.readByte() })
+        object_definition.unknown = Array(6).fill(undefined).map(_ => { return reader.readByte() })
         break
     }
     return object_definition

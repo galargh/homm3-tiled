@@ -205,7 +205,7 @@ function create(inputFile, outputDir) {
       json.name = json.name.replace('@0', '')
       var  group_object_id = 0
       const objectgroup = []
-      Array(8).fill().map((_, x) => { return Array(6).fill().map((_, y) => { return [x, y] }) }).flat().map(([x, y]) => {
+      Array(8).fill(undefined).map((_, x) => { return Array(6).fill(undefined).map((_, y) => { return [x, y] }) }).flat().map(([x, y]) => {
         const rx = -(8 - (json.tilewidth / 32) - x) * 32
         const ry = -(6 - (json.tileheight / 32) - y) * 32
         if (attributes.passable[y][x] == 0) {

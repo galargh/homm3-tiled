@@ -10,7 +10,7 @@ function extract(inputFile, outputDir) {
   reader.set(8)
   const length = reader.readInt()
   reader.set(92)
-  const  outputFiles = Array(length).fill().map(_ => {
+  const  outputFiles = Array(length).fill(undefined).map(_ => {
     const name = reader.readString(16).split('\0')[0].toLowerCase()
     const offset = reader.readInt()
     const size = reader.readInt()

@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import * as image_size from 'image-size'
+import { imageSize } from 'image-size'
 
 const files =  fs.readdirSync('.').filter(file => file.endsWith('.json'))
 
@@ -31,7 +31,7 @@ files.forEach(file => {
     var animation_dimensions
     var animation_image
     var tiled_tiles = sequence.frames.map((image_file, index) => {
-      animation_dimensions = image_size(image_file)
+      animation_dimensions = imageSize(image_file)
       animation_image = image_file
       return {
         "id": index,
@@ -44,7 +44,7 @@ files.forEach(file => {
 
     if (is_animated) {
       const animation = {
-        "animation": Array(frames_count).fill().map((_, index) => { return {"duration": 100, "tileid": index} }),
+        "animation": Array(frames_count).fill(undefined).map((_, index) => { return {"duration": 100, "tileid": index} }),
         "id": frames_count,
         "image": animation_image,
         "imageheight": animation_dimensions.height,
