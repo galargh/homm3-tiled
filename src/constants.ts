@@ -5,7 +5,7 @@ export const FORMAT = {
   CHR:  0x0000001D,
   WOG:  0x00000033,
   HOTA: 0x0000020
-}
+} as any
 
 export const SPECIAL_WIN_CONDITION = {
   ACQUIRE_ARTIFACT:     0x00,
@@ -19,13 +19,13 @@ export const SPECIAL_WIN_CONDITION = {
   FLAG_DWELLINGS:       0x08,
   FLAG_MINES:           0x09,
   TRANSPORT_ARTIFACT:   0x0A
-}
+} as any
 
 export const SPECIAL_LOSS_CONDITION = {
   LOSE_TOWN: 0x00,
   LOSE_HERO: 0x01,
   TIME:      0x02
-}
+} as any
 
 export const OBJECT_CLASS = {
   NO_OBJ:                       -1,
@@ -263,7 +263,7 @@ export const OBJECT_CLASS = {
   MAGIC_CLOUDS:                 229,
   MAGIC_PLAINS2:                230,
   ROCKLANDS:                    231
-}
+} as any
 
 export const QUEST_TYPE = {
   NONE:           0x00,
@@ -276,7 +276,7 @@ export const QUEST_TYPE = {
   RESOURCES:      0x07,
   BE_HERO:        0x08,
   BE_PLAYER:      0x09
-}
+} as any
 
 export const REWARD_TYPE = {
   NONE:            0x00,
@@ -290,4 +290,4 @@ export const REWARD_TYPE = {
   ARTIFACT:        0x08,
   SPELL:           0x09,
   CREATURE:        0x0A
-}
+} as any
