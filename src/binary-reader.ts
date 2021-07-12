@@ -1,6 +1,6 @@
-const fs = require('fs');
+import * as fs from 'fs'
 
-class BinaryReader {
+export default class BinaryReader {
   constructor(data) {
     this.content = Buffer.isBuffer(data) ? data : fs.readFileSync(data)
     this.length = this.content.length
@@ -54,5 +54,3 @@ class BinaryReader {
     this.offset = offset
   }
 }
-
-module.exports = BinaryReader

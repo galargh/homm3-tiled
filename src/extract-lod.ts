@@ -1,7 +1,7 @@
-const BinaryReader = require('./binary-reader.js')
-const zlib = require('zlib')
-const fs = require('fs')
-const encode = require('image-encode')
+import BinaryReader from './binary-reader'
+import * as fs from 'fs'
+import * as zlib from 'zlib'
+import * as encode from 'image-encode'
 
 function extract(inputFile, outputDir) {
   const reader = new BinaryReader(inputFile)

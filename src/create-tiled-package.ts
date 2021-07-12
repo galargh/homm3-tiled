@@ -1,8 +1,6 @@
-const fs = require('fs');
-const path = require('path');
-const {
-  FORMAT
-} = require('./constants.js')
+import * as fs from 'fs'
+import * as path from 'path'
+import { FORMAT } from './constants'
 
 const TERRAIN_DEFS = [
   'dirttl',

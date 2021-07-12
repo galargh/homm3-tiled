@@ -1,14 +1,14 @@
-const fs = require('fs');
-const zlib = require('zlib')
-const path = require('path');
-const MapReader = require('./map-reader.js')
-const {
+import MapReader from './map-reader'
+import * as fs from 'fs'
+import * as path from 'path'
+import * as zlib from 'zlib'
+import {
   FORMAT,
   SPECIAL_WIN_CONDITION,
   SPECIAL_LOSS_CONDITION,
   OBJECT_CLASS,
   REWARD_TYPE
-} = require('./constants.js')
+} from './constants'
 
 function extract(inputFile, outputDir) {
   const inputFileName = path.parse(inputFile).base.replace('.h3m', '')

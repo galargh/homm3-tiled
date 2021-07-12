@@ -1,4 +1,4 @@
-const FORMAT = {
+export const FORMAT = {
   ROE:  0x0000000E,
   AB:   0x00000015,
   SOD:  0x0000001C,
@@ -7,7 +7,7 @@ const FORMAT = {
   HOTA: 0x0000020
 }
 
-const SPECIAL_WIN_CONDITION = {
+export const SPECIAL_WIN_CONDITION = {
   ACQUIRE_ARTIFACT:     0x00,
   ACCUMULATE_CREATURES: 0x01,
   ACCUMULATE_RESOURCES: 0x02,
@@ -21,13 +21,13 @@ const SPECIAL_WIN_CONDITION = {
   TRANSPORT_ARTIFACT:   0x0A
 }
 
-const SPECIAL_LOSS_CONDITION = {
+export const SPECIAL_LOSS_CONDITION = {
   LOSE_TOWN: 0x00,
   LOSE_HERO: 0x01,
   TIME:      0x02
 }
 
-const OBJECT_CLASS = {
+export const OBJECT_CLASS = {
   NO_OBJ:                       -1,
   NONE_0:                       0,
   DECORATIVE_TOWN:              1,
@@ -265,7 +265,7 @@ const OBJECT_CLASS = {
   ROCKLANDS:                    231
 }
 
-const QUEST_TYPE = {
+export const QUEST_TYPE = {
   NONE:           0x00,
   EXPERIENCE:     0x01,
   PRIMARY_SKILLS: 0x02,
@@ -278,7 +278,7 @@ const QUEST_TYPE = {
   BE_PLAYER:      0x09
 }
 
-const REWARD_TYPE = {
+export const REWARD_TYPE = {
   NONE:            0x00,
   EXPERIENCE:      0x01,
   SPELL_POINTS:    0x02,
@@ -290,13 +290,4 @@ const REWARD_TYPE = {
   ARTIFACT:        0x08,
   SPELL:           0x09,
   CREATURE:        0x0A
-}
-
-module.exports = {
-  FORMAT,
-  SPECIAL_WIN_CONDITION,
-  SPECIAL_LOSS_CONDITION,
-  OBJECT_CLASS,
-  QUEST_TYPE,
-  REWARD_TYPE
 }

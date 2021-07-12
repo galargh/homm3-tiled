@@ -1,6 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-const image_size = require('image-size');
+import * as fs from 'fs'
+import * as path from 'path'
+import * as image_size from 'image-size'
+
 const files =  fs.readdirSync('.').filter(file => file.endsWith('.json'))
 
 files.forEach(file => {

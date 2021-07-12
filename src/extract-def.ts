@@ -1,7 +1,7 @@
-const BinaryReader = require('./binary-reader.js')
-const encode = require('image-encode')
-const fs = require('fs')
-const path = require('path');
+import BinaryReader from './binary-reader'
+import * as fs from 'fs'
+import * as path from 'path'
+import * as encode from 'image-encode'
 
 const unsupportedSuffixes = [
   'hota/artifact.def',

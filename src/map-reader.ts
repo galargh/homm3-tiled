@@ -1,10 +1,10 @@
-const BinaryReader = require('./binary-reader.js')
-const {
+import BinaryReader from './binary-reader'
+import {
   FORMAT,
   QUEST_TYPE
-} = require('./constants.js')
+} from './constants'
 
-class MapReader extends BinaryReader {
+export default class MapReader extends BinaryReader {
   readPrimarySkills() {
     const val = {}
     val.attack_skill = this.readByte()
