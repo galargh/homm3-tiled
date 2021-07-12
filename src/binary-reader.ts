@@ -1,6 +1,10 @@
 import * as fs from 'fs'
 
 export default class BinaryReader {
+  content
+  length
+  offset
+  
   constructor(data) {
     this.content = Buffer.isBuffer(data) ? data : fs.readFileSync(data)
     this.length = this.content.length

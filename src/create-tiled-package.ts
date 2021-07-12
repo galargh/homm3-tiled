@@ -187,7 +187,7 @@ function create(inputFile, outputDir) {
     source: 'tileset.json'
   }]
 
-  const defToGID = {}
+  const defToGID = {} as any
   var oid = 0
 
   fs.mkdirSync(outputDir + '/objectgroup', { recursive: true })

@@ -6,7 +6,7 @@ import {
 
 export default class MapReader extends BinaryReader {
   readPrimarySkills() {
-    const val = {}
+    const val = {} as any
     val.attack_skill = this.readByte()
     val.defense_skill = this.readByte()
     val.spell_power = this.readByte()
@@ -16,7 +16,7 @@ export default class MapReader extends BinaryReader {
 
   readSecondarySkills() {
     return Array.fill(this.readByte()).map(_ => {
-      const val = {}
+      const val = {} as any
       val.type = this.readByte()
       val.level = this.readByte()
       return val
@@ -24,7 +24,7 @@ export default class MapReader extends BinaryReader {
   }
 
   readCreature(ctx) {
-    const val = {}
+    const val = {} as any
     if (ctx.format == FORMAT.ROE) {
       val.type = this.readByte()
     } else {
@@ -52,7 +52,7 @@ export default class MapReader extends BinaryReader {
   }
 
   readQuest(ctx) {
-    const val = {}
+    const val = {} as any
     val.type = this.readByte()
     if (val.type != 0xFF) {
       switch(val.type) {
@@ -95,7 +95,7 @@ export default class MapReader extends BinaryReader {
   }
 
   readEvent(ctx) {
-    const val = {}
+    const val = {} as any
     val.name = this.readString(this.readInt())
     val.message = this.readString(this.readInt())
     val.resources = Array(7).fill().map(_ => { return this.readInt() })

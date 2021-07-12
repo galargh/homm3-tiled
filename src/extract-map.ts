@@ -17,7 +17,7 @@ function extract(inputFile, outputDir) {
   if (fs.existsSync(outputFile)) {
     return
   }
-  const map = {}
+  const map = {}  as any
   const reader = new MapReader(zlib.unzipSync(fs.readFileSync(inputFile)))
   map.format = reader.readInt()
   map.has_hero = reader.readBool()
@@ -32,7 +32,7 @@ function extract(inputFile, outputDir) {
   }
 
   map.players = Array(8).fill().map(_ => {
-    const player = {}
+    const player = {} as any
     player.can_be_human = reader.readBool()
     player.can_be_computer = reader.readBool()
     player.behavior = reader.readByte()
@@ -66,7 +66,7 @@ function extract(inputFile, outputDir) {
     return player
   })
 
-  const special_win_condition = {}
+  const special_win_condition = {} as any
   special_win_condition.id = reader.readByte()
 
   switch(special_win_condition.id) {
@@ -137,7 +137,7 @@ function extract(inputFile, outputDir) {
   }
   map.special_win_condition = special_win_condition
 
-  const special_loss_condition = {}
+  const special_loss_condition = {} as any
   special_loss_condition.id = reader.readByte()
 
   switch(special_loss_condition.id) {
@@ -166,7 +166,7 @@ function extract(inputFile, outputDir) {
   }
   if (map.format >= FORMAT.SOD) {
     map.custom_heroes = Array(reader.readByte()).fill().map(_ => {
-      const custom_hero = {}
+      const custom_hero = {} as any
       custom_hero.type = reader.readByte()
       custom_hero.face = reader.readByte()
       custom_hero.name = reader.readString(reader.readInt())
@@ -185,14 +185,14 @@ function extract(inputFile, outputDir) {
     map.available_skills = Array(4).fill().map(_ => { return reader.readByte() })
   }
   map.rumors = Array(reader.readInt()).fill().map(_ => {
-    const rumor = {}
+    const rumor = {} as any
     rumor.name = reader.readString(reader.readInt())
     rumor.description = reader.readString(reader.readInt())
     return rumor
   })
   if (map.format >= FORMAT.SOD) {
     map.hero_settings = Array(156).fill().map(_ => {
-      const hero = {}
+      const hero = {} as any
       if (reader.readBool()) {
         if (reader.readBool()) {
           hero.experience = reader.readInt()
@@ -221,7 +221,7 @@ function extract(inputFile, outputDir) {
   }
   const tiles_count = map.has_second_level ? map.size * map.size * 2 : map.size * map.size
   map.tiles = Array(tiles_count).fill().map(_ => {
-    const tile = {}
+    const tile = {} as any
     /*
     T_DIRT,
     T_SAND,
@@ -245,7 +245,7 @@ function extract(inputFile, outputDir) {
   })
 
   map.object_attributes = Array(reader.readInt()).fill().map(_ => {
-    const object_attribute = {}
+    const object_attribute = {} as any
     object_attribute.def = reader.readString(reader.readInt())
     // The passable and active arrays are bitfields representing an 8x6 tile
     // region where bit 1 marks passable and bit 0 impassable. Counting goes
@@ -276,7 +276,7 @@ function extract(inputFile, outputDir) {
   // TODO: https://github.com/potmdehex/homm3tools/blob/5687f581a4eb5e7b0e8f48794d7be4e3b0a8cc8b/h3m/h3mlib/h3m_parsing/parse_oa.c#L108
 
   const object_definitions = Array(reader.readInt()).fill().map(_ => {
-    const object_definition = {}
+    const object_definition = {} as any
     object_definition.x = reader.readByte()
     object_definition.y = reader.readByte()
     object_definition.z = reader.readByte()
