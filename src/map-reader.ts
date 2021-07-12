@@ -15,7 +15,7 @@ export default class MapReader extends BinaryReader {
   }
 
   readSecondarySkills() {
-    return Array.fill(this.readByte()).map(_ => {
+    return Array(this.readByte()).fill(undefined).map(_ => {
       const val = {} as any
       val.type = this.readByte()
       val.level = this.readByte()
@@ -85,7 +85,7 @@ export default class MapReader extends BinaryReader {
           break
       }
     }
-    val.deadline = reader.readInt()
+    val.deadline = ctx.readInt()
     if (val.quest.type != 0xFF && ctx.format >= FORMAT.SOD) {
       val.proposal_messaage = this.readString(this.readInt())
       val.progress_message = this.readString(this.readInt())

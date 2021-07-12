@@ -40,7 +40,7 @@ function create(inputFile, outputDir) {
     return
   }*/
   fs.mkdirSync(outputDir, { recursive: true })
-  const map = JSON.parse(fs.readFileSync(inputFile))
+  const map = JSON.parse(fs.readFileSync(inputFile).toString())
 
   var gid = 0
   const seen = []
@@ -160,7 +160,7 @@ function create(inputFile, outputDir) {
   fs.mkdirSync(outputDir + '/tileset', { recursive: true })
   const tiles = seen.map(tileDefinition => {
     const file = defDir + '/' + tileDefinition.def + '/' + tileDefinition.def + '/0.json'
-    const json = JSON.parse(fs.readFileSync(file))
+    const json = JSON.parse(fs.readFileSync(file).toString())
     const tile = json.tiles.find(tile => { return tile.id == tileDefinition.id })
     if (tile == undefined) {
       console.log(file, tileDefinition)
@@ -196,7 +196,7 @@ function create(inputFile, outputDir) {
   const groups = objects.map(([definition, attributes]) => {
     const baseName = attributes.def.replace('.def', '').toLowerCase()
     const srcDir = defDir + '/' + baseName + '/' + baseName
-    const json = JSON.parse(fs.readFileSync(srcDir + '/0.json'))
+    const json = JSON.parse(fs.readFileSync(srcDir + '/0.json').toString())
     if (defToGID[baseName] == undefined) {
       tilesets.push({
         firstgid: gid + 1,
@@ -288,6 +288,7 @@ function create(inputFile, outputDir) {
       objects: group,
       width: map.size,
       height: map.size,
+      data: undefined,
       id: z + layers.length,
       name: z == 0 ? 'Objects' : 'Underground Objects',
       opacity: 1,
@@ -305,8 +306,6 @@ function create(inputFile, outputDir) {
     version: '1.6',
     renderorder: 'right-down',
     orientation: 'orthogonal',
-    nextlayerid: 0,
-    nextobjectid: 0,
     width: map.size,
     height: map.size,
     tilewidth: 32,

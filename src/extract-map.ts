@@ -202,7 +202,7 @@ function extract(inputFile, outputDir) {
           hero.secondary_skills = reader.readSecondarySkills()
         }
         if (reader.readBool()) {
-          hero.artifacts = reader.readArtifacts()
+          hero.artifacts = reader.readArtifacts(map)
           hero.backpack = Array(reader.readShort()).fill(undefined).map(_ => { return reader.readArtifact(map) })
         }
         if (reader.readBool()) {
@@ -316,9 +316,9 @@ function extract(inputFile, outputDir) {
         object_definition.resources = Array(7).fill(undefined).map(_ => { return reader.readInt() })
         object_definition.primary_skills = reader.readPrimarySkills()
         object_definition.secondary_skills = reader.readSecondarySkills()
-        object_definition.artifacts = Array.fill(reader.readByte()).map(_ => { return reader.readArtifact(map) })
-        object_definition.spells = Array.fill(reader.readByte()).map(_ => { return reader.readByte() })
-        object_definition.creatures = Array.fill(reader.readByte()).map(_ => { reader.readCreature(map) })
+        object_definition.artifacts = Array(reader.readByte()).fill(undefined).map(_ => { return reader.readArtifact(map) })
+        object_definition.spells = Array(reader.readByte()).fill(undefined).map(_ => { return reader.readByte() })
+        object_definition.creatures = Array(reader.readByte()).fill(undefined).map(_ => { reader.readCreature(map) })
         object_definition.unknown = Array(8).fill(undefined).map(_ => { return reader.readByte() })
         if (object_class == OBJECT_CLASS.EVENT) {
           object_definition.applies_to_players = reader.readByte()
@@ -621,7 +621,7 @@ function extract(inputFile, outputDir) {
         }
         object_definition.formation = reader.readByte()
         if (reader.readBool()) {
-          object_definition.artifacts = reader.readArtifacts()
+          object_definition.artifacts = reader.readArtifacts(map)
           object_definition.backpack = Array(reader.readShort()).fill(undefined).map(_ => { return reader.readArtifact(map) })
         }
         object_definition.patrol_radius = reader.readByte()
