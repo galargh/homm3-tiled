@@ -5,8 +5,8 @@
     "module": "commonjs",
     "outDir": "built",
     "rootDir": "src",
-    "strict": false,
-    "target": "es2017"
+    "strict": true,
+    "target": "es2019"
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "types/**/*"]
 }

@@ -21,7 +21,7 @@ export default class MapReader extends BinaryReader {
     })
   }
 
-  readCreature(ctx) {
+  readCreature(ctx: any) {
     const val = {} as any
     if (ctx.format == Format.ROE) {
       val.type = this.readByte()
@@ -33,7 +33,7 @@ export default class MapReader extends BinaryReader {
     return val
   }
 
-  readArtifact(ctx) {
+  readArtifact(ctx: any) {
     if (ctx.format == Format.ROE) {
       return this.readByte()
     } else {
@@ -41,7 +41,7 @@ export default class MapReader extends BinaryReader {
     }
   }
 
-  readArtifacts(ctx) {
+  readArtifacts(ctx: any) {
     if (ctx.format < Format.SOD) {
       return Array(18).fill(undefined).map(_ => { return this.readArtifact(ctx) })
     } else {
@@ -49,7 +49,7 @@ export default class MapReader extends BinaryReader {
     }
   }
 
-  readQuest(ctx) {
+  readQuest(ctx: any) {
     const val = {} as any
     val.type = this.readByte()
     if (val.type != 0xFF) {
@@ -92,7 +92,7 @@ export default class MapReader extends BinaryReader {
     return val
   }
 
-  readEvent(ctx) {
+  readEvent(ctx: any) {
     const val = {} as any
     val.name = this.readString(this.readInt())
     val.message = this.readString(this.readInt())
@@ -111,7 +111,7 @@ export default class MapReader extends BinaryReader {
     return val
   }
 
-  readEvents(ctx) {
+  readEvents(ctx: any) {
     return Array(this.readInt()).fill(undefined).map(_ => { return this.readEvent(ctx) })
   }
 }

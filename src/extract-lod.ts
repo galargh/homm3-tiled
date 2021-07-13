@@ -3,7 +3,7 @@ import * as fs from 'fs'
 import * as zlib from 'zlib'
 import * as encode from 'image-encode'
 
-function extract(inputFile, outputDir) {
+function extract(inputFile: string, outputDir: string) {
   const reader = new BinaryReader(inputFile)
   if (fs.existsSync(outputDir)) { return }
   fs.mkdirSync(outputDir, { recursive: true })
@@ -16,9 +16,8 @@ function extract(inputFile, outputDir) {
     const size = reader.readInt()
     reader.skip(4)
     const csize = reader.readInt()
-    return [name, offset, size, csize]
-  }).map(object => {
-    const [name, offset, size, csize] = object
+    return [name, offset, size, csize] as [string, number, number, number]
+  }).map(([name, offset, size, csize]) => {
     reader.set(offset)
     var data
     if (csize != 0) {
@@ -31,7 +30,7 @@ function extract(inputFile, outputDir) {
       const imageSize = imageReader.readInt()
       const imageWidth = imageReader.readInt()
       const imageHeight = imageReader.readInt()
-      const imageData = []
+      const imageData: Array<number> = []
       if (imageSize == imageWidth * imageHeight) {
         const palette = imageReader.readByteArray(imageWidth * imageHeight)
         imageReader.readByteArray(imageWidth * imageHeight).forEach(index => {

@@ -1,11 +1,11 @@
 import * as fs from 'fs'
 
 export default class BinaryReader {
-  content
-  length
-  offset
-  
-  constructor(data) {
+  content: Buffer
+  length: number
+  offset: number
+
+  constructor(data: (Buffer | string)) {
     this.content = Buffer.isBuffer(data) ? data : fs.readFileSync(data)
     this.length = this.content.length
     this.offset = 0
@@ -35,7 +35,7 @@ export default class BinaryReader {
     return val
   }
 
-  readByteArray(length) {
+  readByteArray(length: number) {
     const val = this.content.slice(this.offset, this.offset + length)
     this.offset += length
     return val
@@ -46,15 +46,15 @@ export default class BinaryReader {
     return this.readByte() != 0
   }
 
-  readString(length) {
+  readString(length: number) {
     return Buffer.from(this.readByteArray(length)).toString()
   }
 
-  skip(length) {
+  skip(length: number) {
     this.offset += length
   }
 
-  set(offset) {
+  set(offset: number) {
     this.offset = offset
   }
 }

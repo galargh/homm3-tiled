@@ -8,7 +8,7 @@ import RewardType from './enums/RewardType'
 import SpecialLossCondition from './enums/SpecialLossCondition'
 import SpecialWinCondition from './enums/SpecialWinCondition'
 
-function extract(inputFile, outputDir) {
+function extract(inputFile: string, outputDir: string) {
   const inputFileName = path.parse(inputFile).base.replace('.h3m', '')
   fs.mkdirSync(outputDir, { recursive: true })
   const outputFile = outputDir + '/' + inputFileName + '.json'
@@ -261,7 +261,7 @@ function extract(inputFile, outputDir) {
     object_attribute.allowed_landscapes = reader.readShort()
     object_attribute.landscape_group = reader.readShort()
     object_attribute.object_class = reader.readInt()
-    object_attribute.object_class_name = Object.keys(ObjectClass).find(key => { return ObjectClass[key] == object_attribute.object_class })
+    object_attribute.object_class_name = Object.keys(ObjectClass).find(key => { return ObjectClass[key as keyof typeof ObjectClass] == object_attribute.object_class })
     object_attribute.object_number = reader.readInt()
     // 1 - towns  2 - monsters  5 - treasure
     // 3 - heroes 4 - artifacts

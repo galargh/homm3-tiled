@@ -19,7 +19,7 @@ const unsupportedSuffixes = [
   'h3sprite/sgtwmtb.def'
 ]
 
-function extract(inputFile, outputDir) {
+function extract(inputFile: string, outputDir: string) {
   const maskFile = inputFile.replace('.def', '.msk')
   if (unsupportedSuffixes.some(suffix => { return inputFile.endsWith(suffix) })) {
     console.log('UNSUPPORTED FILE:' + inputFile)
@@ -46,7 +46,7 @@ function extract(inputFile, outputDir) {
     const offsets = Array(entries).fill(undefined).map(_ => {
       return reader.readInt()
     })
-    return [id, names, offsets]
+    return [id, names, offsets] as [number, string[], number[]]
   })
   var shortDefinition = groups.some(([_1, _2, offsets]) => { 
     return offsets.some(offset => { 
@@ -59,7 +59,7 @@ function extract(inputFile, outputDir) {
     fs.mkdirSync(outputDirWithId, { recursive: true })
     var tileWidth = 0
     var tileHeight = 0
-    const tiles = offsets.map((offset, index) => { return [offset, names[index]] }).map(([offset, name], tileId) => {
+    const tiles = offsets.map((offset, index) => { return [offset, names[index]] as [number, string] }).map(([offset, name], tileId) => {
       reader.set(offset)
       const size = reader.readInt()
       const format = reader.readInt()
@@ -71,10 +71,10 @@ function extract(inputFile, outputDir) {
       const top = reader.readInt() % fullHeight
       tileWidth = Math.max(tileWidth, fullWidth)
       tileHeight = Math.max(tileHeight, fullHeight)
-      var data = []
+      var data: number[] = []
       switch(format) {
         case 0:
-          data = reader.readByteArray(width * height)
+          data = [...reader.readByteArray(width * height)]
           break
         case 1:
           Array(height).fill(undefined).map(_ => { return reader.readInt() }).forEach(dataOffset => {
@@ -202,10 +202,10 @@ function extract(inputFile, outputDir) {
 }
 
 function extractDir(inputDir = 'data/lod', outputDir = 'data/def') {
-  const inputFiles = []
-  const inputDirs = [inputDir]
+  const inputFiles: string[] = []
+  const inputDirs: string[] = [inputDir]
   while (inputDirs.length > 0) {
-    const dir = inputDirs.pop()
+    const dir: string = inputDirs.pop() as string
     fs.readdirSync(dir).forEach(file => {
       file = dir + '/' + file
       if (fs.statSync(file).isDirectory()) {

@@ -30,10 +30,31 @@ const ROAD_DEFS = [
   'cblord'
 ]
 
+interface Tile {
+  id: number,
+  gid: number,
+  def: string
+} 
+
+interface ObjectGroup {
+  width: number,
+  height: number,
+  name: string
+  type: string,
+  visible: boolean,
+  x: number,
+  y: number
+}
+
+interface Property {
+  name: string,
+  type: string,
+  value: any
+}
 
 create('data/h3m/Manifest Destiny.json', 'data/tiled')
 
-function create(inputFile, outputDir) {
+function create(inputFile: string, outputDir: string) {
   const inputFileName = path.parse(inputFile).base.replace('.json', '')
   outputDir = outputDir + '/' + inputFileName
   /*if (fs.existsSync(outputDir)) {
@@ -43,7 +64,7 @@ function create(inputFile, outputDir) {
   const map = JSON.parse(fs.readFileSync(inputFile).toString())
 
   var gid = 0
-  const seen = []
+  const seen: Tile[] = []
 
   const layers = [{
     name: 'Terrain',
@@ -112,7 +133,7 @@ function create(inputFile, outputDir) {
     horizontalMask: 16,
     z: 1,
   }].map((layerDefinition, lid) => {
-    const data = map.tiles.slice(layerDefinition.start, layerDefinition.end).map(tile => {
+    const data = map.tiles.slice(layerDefinition.start, layerDefinition.end).map((tile: any) => {
       const def = layerDefinition.defs[tile[layerDefinition.typeKey]]
       const id = tile[layerDefinition.idKey]
       const vm = (tile.mirroring & layerDefinition.verticalMask) == 0 ? 0 : 0x40000000
@@ -121,7 +142,7 @@ function create(inputFile, outputDir) {
       if (def == null) {
         return 0
       }
-      var t = seen.find(t => t.def == def && t.id == id)
+      let t = seen.find(t => t.def == def && t.id == id)
       if (t == undefined) {
         gid = gid + 1
         t = { def: def, id: id, gid: gid }
@@ -161,7 +182,7 @@ function create(inputFile, outputDir) {
   const tiles = seen.map(tileDefinition => {
     const file = defDir + '/' + tileDefinition.def + '/' + tileDefinition.def + '/0.json'
     const json = JSON.parse(fs.readFileSync(file).toString())
-    const tile = json.tiles.find(tile => { return tile.id == tileDefinition.id })
+    const tile = json.tiles.find((tile: any) => { return tile.id == tileDefinition.id })
     if (tile == undefined) {
       console.log(file, tileDefinition)
       process.exit(0)
@@ -192,8 +213,8 @@ function create(inputFile, outputDir) {
 
   fs.mkdirSync(outputDir + '/objectgroup', { recursive: true })
 
-  const objects = map.object_definitions.map(definition => [definition, map.object_attributes[definition.object_attributes_index]])
-  const groups = objects.map(([definition, attributes]) => {
+  const objects = map.object_definitions.map((definition: any) => [definition, map.object_attributes[definition.object_attributes_index]])
+  const groups = objects.map(([definition, attributes]: [any, any]) => {
     const baseName = attributes.def.replace('.def', '').toLowerCase()
     const srcDir = defDir + '/' + baseName + '/' + baseName
     const json = JSON.parse(fs.readFileSync(srcDir + '/0.json').toString())
@@ -204,7 +225,7 @@ function create(inputFile, outputDir) {
       })
       json.name = json.name.replace('@0', '')
       var  group_object_id = 0
-      const objectgroup = []
+      const objectgroup: ObjectGroup[] = []
       Array(8).fill(undefined).map((_, x) => { return Array(6).fill(undefined).map((_, y) => { return [x, y] }) }).flat().map(([x, y]) => {
         const rx = -(8 - (json.tilewidth / 32) - x) * 32
         const ry = -(6 - (json.tileheight / 32) - y) * 32
@@ -233,7 +254,7 @@ function create(inputFile, outputDir) {
           })
         }
       })
-      json.tiles = json.tiles.map(tile => {
+      json.tiles = json.tiles.map((tile: any) => {
         tile.image = tile.image.replace('0/', baseName + '/')
         tile.objectgroup = {
           draworder: "index",
@@ -273,7 +294,7 @@ function create(inputFile, outputDir) {
         "value": definition.z
       }]
     }
-  }).reduce((agg, object) => {
+  }).reduce((agg: any, object: any) => {
     const key = JSON.stringify(object.properties)
     agg[key] = agg[key] || []
     agg[key].push(object)
@@ -282,8 +303,8 @@ function create(inputFile, outputDir) {
 
   layers.push(...Object.keys(groups).map(key => {
     const group = groups[key]
-    const properties = JSON.parse(key)
-    const z = properties.find(property => { return property.name == "z" }).value
+    const properties: Property[] = JSON.parse(key)
+    const z: number = (properties.find(property => { return property.name == "z" }) || { value: -1 }).value
     return {
       objects: group,
       width: map.size,
