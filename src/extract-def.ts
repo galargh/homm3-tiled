@@ -1,4 +1,4 @@
-import BinaryReader from './binary-reader'
+import BinaryReader from './readers/BinaryReader'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as encode from 'image-encode'

@@ -1,6 +1,6 @@
-import BinaryReader from './binary-reader'
-import Format from './enums/Format'
-import QuestType from './enums/QuestType'
+import BinaryReader from './BinaryReader'
+import Format from '../enums/Format'
+import QuestType from '../enums/QuestType'
 
 export default class MapReader extends BinaryReader {
   readPrimarySkills() {

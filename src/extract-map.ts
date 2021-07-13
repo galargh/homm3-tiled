@@ -1,4 +1,4 @@
-import MapReader from './map-reader'
+import MapReader from './readers/MapReader'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as zlib from 'zlib'
