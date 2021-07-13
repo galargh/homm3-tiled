@@ -1,29 +1,54 @@
 {
   "name": "homm3-tiled",
   "version": "1.0.0",
-  "description": "### Prerequisites",
-  "main": "animations-tiled.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "author": "Piotr Galar @gfjalar",
+  "bin": {
+    "homm3-tiled": "bin/run"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gfjalar/homm3-tiled.git"
   },
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/gfjalar/homm3-tiled/issues"
   },
   "homepage": "https://github.com/gfjalar/homm3-tiled#readme",
   "dependencies": {
+    "@oclif/command": "^1.8.0",
+    "@oclif/config": "^1.17.0",
+    "@oclif/plugin-help": "^3.2.2",
     "filereader": "^0.10.3",
     "image-encode": "^1.3.1",
     "image-size": "^1.0.0",
+    "tslib": "^2.3.0",
     "zlib": "^1.0.5"
   },
   "devDependencies": {
+    "@oclif/dev-cli": "^1.26.0",
     "@types/node": "^16.3.1",
+    "globby": "^10.0.2",
+    "ts-node": "^8.10.2",
     "typescript": "^4.3.5"
-  }
+  },
+  "license": "MIT",
+  "main": "built/cli.js",
+  "oclif": {
+    "commands": "./built/commands",
+    "bin": "homm3-tiled",
+    "plugins": [
+      "@oclif/plugin-help"
+    ]
+  },
+  "scripts": {
+    "postpack": "rm -f oclif.manifest.json",
+    "prepack": "rm -rf built && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "version": "oclif-dev readme && git add README.md"
+  },
+  "types": "built/index.d.ts",
+  "files": [
+    "bin",
+    "built",
+    "npm-shrinkwrap.json",
+    "oclif.manifest.json"
+  ]
 }
