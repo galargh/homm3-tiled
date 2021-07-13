@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import { FORMAT } from './constants'
+import Format from './enums/Format'
 
 const TERRAIN_DEFS = [
   'dirttl',
@@ -150,7 +150,7 @@ function create(inputFile, outputDir) {
   })
 
   var defDir = 'data/def/'
-  if (map.format == FORMAT.HOTA) {
+  if (map.format == Format.HOTA) {
     defDir += 'hota'
   } else {
     defDir += 'h3sprite'
