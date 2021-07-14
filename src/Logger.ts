@@ -11,23 +11,24 @@ export default class Logger {
 
   static log(logLevel: LogLevel, ...data: any[]) {
     if (logLevel >= this.logLevel) {
-      console.log(`[{logLevel}]`, data)
+      data.unshift(`[${LogLevel[logLevel]}]`)
+      console.log(...data)
     }
   }
 
   static debug(...data: any[]) {
-    this.log(LogLevel.DEBUG, data)
+    this.log(LogLevel.DEBUG, ...data)
   }
 
   static info(...data: any[]) {
-    this.log(LogLevel.INFO, data)
+    this.log(LogLevel.INFO, ...data)
   }
 
   static warn(...data: any[]) {
-    this.log(LogLevel.WARN, data)
+    this.log(LogLevel.WARN, ...data)
   }
 
   static error(...data: any[]) {
-    this.log(LogLevel.ERROR, data)
+    this.log(LogLevel.ERROR, ...data)
   }
 }
