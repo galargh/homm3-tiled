@@ -1,4 +1,4 @@
-import {Command, flags} from '@oclif/command'
+import {Command} from '@oclif/command'
 
 export default class ConvertOne extends Command {
   static description = 'converts HoMM3 h3m file to Tiled json map file'

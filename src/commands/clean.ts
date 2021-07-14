@@ -1,7 +1,8 @@
-import {Command, flags} from '@oclif/command'
+import Command from "../Command"
 
 export default class Clean extends Command {
-  static description = 'cleans the cache that stores extracted def, lod and h3m files'
+  static description = 'cleans the data that stores extracted def, lod and h3m files'
 
-  async run() {}
+  async run() {
+  }
 }
