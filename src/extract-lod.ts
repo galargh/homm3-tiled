@@ -30,7 +30,7 @@ function extract(inputFile: string, outputDir: string) {
       const imageSize = imageReader.readInt()
       const imageWidth = imageReader.readInt()
       const imageHeight = imageReader.readInt()
-      const imageData: Array<number> = []
+      const imageData: number[] = []
       if (imageSize == imageWidth * imageHeight) {
         const palette = imageReader.readByteArray(imageWidth * imageHeight)
         imageReader.readByteArray(imageWidth * imageHeight).forEach(index => {

@@ -205,7 +205,7 @@ function extractDir(inputDir = 'data/lod', outputDir = 'data/def') {
   const inputFiles: string[] = []
   const inputDirs: string[] = [inputDir]
   while (inputDirs.length > 0) {
-    const dir: string = inputDirs.pop() as string
+    const dir: string = inputDirs.pop()!
     fs.readdirSync(dir).forEach(file => {
       file = dir + '/' + file
       if (fs.statSync(file).isDirectory()) {
